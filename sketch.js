@@ -11,6 +11,8 @@ let pixelDensity = 40;
 function setup() {
   pixels = [];
   startD = false;
+  frameRate(60);
+  pixelDensity = gup('p');
 
   createCanvas(windowWidth, windowHeight);
   background(30);
@@ -24,6 +26,14 @@ function setup() {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   background(30);
+}
+
+function gup(name) {
+  name = RegExp('[?&]' + name.replace(/([[\]])/, '\\$1') + '=([^&#]*)');
+  if (!window.location.href.match(name)) {
+    return 40;
+  }
+  return (window.location.href.match(name) || ['', ''])[1];
 }
 function getNextX(curX) {
   curX += round(random(-drawStep, drawStep)) * pixelSize;
