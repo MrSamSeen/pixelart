@@ -6,7 +6,7 @@ let drawY = 0;
 let drawRed = 100;
 let drawGreen = 100;
 let drawBlue = 100;
-let drawStep = 2;
+let drawStep = 1.5;
 let pixelDensity = 40;
 function setup() {
   pixels = [];
@@ -75,18 +75,16 @@ function draw() {
 
   pixels.push(new pixel(drawX = getNextX(drawX), drawY = getNextY(drawY), drawRed = nextColor(drawRed), drawGreen = nextColor(drawGreen), drawBlue = nextColor(drawBlue)));
 
-  background(30);
-  for (let i = 0; i < pixels.length; i++) {
-    pixels[i].show();
+  if (frameCount % 2 == 0) {
+    background(30);
+    for (let i = 0; i < pixels.length; i++) {
+      pixels[i].show();
+    }
   }
-  // if (frameCount % 10 == 0) {
-  //   let p = new pixel(random(width), random(height), color(255, 255, 255));
-  //   pixels.push(p);
-  // }
 }
 
 class pixel {
-  life = 5000;
+  life = 3000;
   constructor(x = 0, y = 0, r = 0, g = 0, b = 0) {
     this.x = x;
     this.y = y;
@@ -98,9 +96,15 @@ class pixel {
   show() {
     if (this.life > 0) {
       this.life--;
-      fill(this.r, this.g, this.b, this.life);
-      noStroke();
+      fill(this.r, this.g, this.b, this.opaque(this.life, 5000));
+      stroke(this.bright(this.r), this.bright(this.g), this.bright(this.b), this.opaque(this.life, 5000));
       rect(this.x, this.y, pixelSize, pixelSize);
     }
+  }
+  bright(val) {
+    return map(val, 0, 255, 50, 255);
+  }
+  opaque(val, max) {
+    return map(val, 0, max, 0, 200);
   }
 }
